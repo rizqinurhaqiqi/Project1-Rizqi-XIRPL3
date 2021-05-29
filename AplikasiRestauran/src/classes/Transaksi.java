@@ -9,6 +9,8 @@ package classes;
  *
  * @author Rizky
  */
+import java.util.ArrayList;
+
 public class Transaksi {
     private String noTransaksi;
     private String namaPemesan;
