@@ -27,6 +27,22 @@ public class MainAplikasiKasir {
           MainAplikasiKasir app = new MainAplikasiKasir();
 
         app.generateDaftarMenu();
+        
+        System.out.println("\t \t \t");
+        System.out.println("========= TRANSAKSI =========");
+        System.out.println("No. Transaksi: ");
+        no_transaksi = input.nextLine();
+        System.out.println("Pemesan: ");
+        nama_pemesan = input.nextLine();
+        System.out.println("Tanggal: [dd/mm/yyyy]");
+        tanggal = input.nextLine();
+        System.out.println("Makan ditempat? [Y/N] ");
+        makan_ditempat = input.nextLine();
+
+        if (makan_ditempat.equalsIgnoreCase("Y")){
+            System.out.println("Nomor Meja: ");
+            no_meja = input.next();
+        }
     }
 
     public void generateDaftarMenu(){
