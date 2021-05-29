@@ -11,6 +11,7 @@ package main;
  */
 import classes.*;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class MainAplikasiKasir {
     public DaftarMenu daftarMenu;
@@ -42,6 +43,71 @@ public class MainAplikasiKasir {
         if (makan_ditempat.equalsIgnoreCase("Y")){
             System.out.println("Nomor Meja: ");
             no_meja = input.next();
+        }
+        
+        
+        Transaksi trans = new Transaksi(no_transaksi, nama_pemesan, tanggal, no_meja);
+        System.out.println("========= PESANAN ========");
+        int no_kuah;
+        do {
+            Menu menu_yang_dipilih = app.daftarMenu.pilihMenu();
+            jumlah_pesanan = (int)app.cekInputNumber("Jumlah: ");
+
+            Pesanan pesanan = new Pesanan(menu_yang_dipilih, jumlah_pesanan);
+            trans.tambahPesanan(pesanan);
+
+            if(menu_yang_dipilih.getKategori().equals("Ramen")){
+                int jumlah_ramen = jumlah_pesanan;
+                do{
+                    Menu kuah_yang_dipilih = app.daftarMenu.pilihKuah();
+
+                    System.out.println("level (0-5): ");
+                    String level = input.nextLine();
+
+                    int jumlah_kuah = 0;
+                    do{
+                        jumlah_kuah = (int) app.cekInputNumber("Jumlah: ");
+
+                        if ( jumlah_kuah > jumlah_ramen){
+                            System.out.println("[Err] Jumlah kuah melebihi jumlah ramen yang sudah dipesan!");
+                        } else {
+                            break;
+                        }
+                    } while (jumlah_kuah > jumlah_ramen);
+
+                    Pesanan pesanan_kuah = new Pesanan(kuah_yang_dipilih, jumlah_kuah);
+                    pesanan_kuah.setKeterangan("Level " + level);
+
+                    trans.tambahPesanan(pesanan_kuah);
+
+                    jumlah_ramen -= jumlah_kuah;
+                } while (jumlah_ramen > 0);
+
+            } else {
+                System.out.println("Keterangan ['-' jika kosong]: ");
+                keterangan = input.nextLine();
+            }
+
+            if (keterangan.equals("-")){
+                pesanan.setKeterangan(keterangan);
+            }
+
+            System.out.println("Tambah Pesanan Lagi? [Y/N]");
+            pesan_lagi = input.next();
+        } while (pesan_lagi.equalsIgnoreCase("Y"));
+
+    }
+
+    public double cekInputNumber(String label){
+        try {
+            Scanner get_input = new Scanner (System.in);
+            System.out.print(label);
+            double nilai = get_input.nextDouble();
+
+            return nilai;
+        } catch(InputMismatchException ex){
+            System.out.println("[Err!] Harap masukkan angka!");
+            return cekInputNumber(label);
         }
     }
 
