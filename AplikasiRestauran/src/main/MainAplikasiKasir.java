@@ -31,17 +31,17 @@ public class MainAplikasiKasir {
         
         System.out.println("\t \t \t");
         System.out.println("========= TRANSAKSI =========");
-        System.out.println("No. Transaksi: ");
+        System.out.print("No. Transaksi: ");
         no_transaksi = input.nextLine();
-        System.out.println("Pemesan: ");
+        System.out.print("Pemesan: ");
         nama_pemesan = input.nextLine();
-        System.out.println("Tanggal: [dd/mm/yyyy]");
+        System.out.print("Tanggal: [dd/mm/yyyy]");
         tanggal = input.nextLine();
-        System.out.println("Makan ditempat? [Y/N] ");
+        System.out.print("Makan ditempat? [Y/N] ");
         makan_ditempat = input.nextLine();
 
         if (makan_ditempat.equalsIgnoreCase("Y")){
-            System.out.println("Nomor Meja: ");
+            System.out.print("Nomor Meja: ");
             no_meja = input.next();
         }
         
@@ -92,10 +92,43 @@ public class MainAplikasiKasir {
                 pesanan.setKeterangan(keterangan);
             }
 
-            System.out.println("Tambah Pesanan Lagi? [Y/N]");
-            pesan_lagi = input.next();
+            System.out.print("Tambah Pesanan Lagi? [Y/N]");
+            pesan_lagi = input.nextLine();
         } while (pesan_lagi.equalsIgnoreCase("Y"));
 
+        trans.cetakStruk();
+
+        double total_pesanan = trans.hitungTotalPesanan();
+        System.out.println("==================");
+        System.out.println("Total: \t\t" + total_pesanan);
+
+        trans.setPajak(PAJAK_PPN);
+        double ppn = trans.hitungPajak();
+        System.out.println("Pajak 10%: \t\t" + ppn);
+
+        double biaya_service = 0;
+        if(makan_ditempat.equalsIgnoreCase("Y")){
+            trans.setBiayaService(BIAYA_SERVICE);
+            biaya_service = trans.hitungBiayaService();
+            System.out.println("Biaya Service 5%: \t" + biaya_service);
+        }
+
+        System.out.println("Total: \t\t\t" + trans.hitungTotalBayar(ppn, biaya_service));
+
+        double kembalian = 0;
+        do{
+            double uang_bayar = app.cekInputNumber("Uang Bayar: \t\t");
+
+            kembalian = trans.hitungKembalian(uang_bayar);
+            if(kembalian < 0){
+                System.out.println("[Err] Uang anda kurang"); 
+            } else {
+                System.out.println("Kembalian: \t\t" + kembalian);
+                break;
+            }
+        } while(kembalian < 0);
+
+        System.out.println("========= TERIMA KASIH =========");
     }
 
     public double cekInputNumber(String label){
